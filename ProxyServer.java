@@ -1,6 +1,9 @@
 package Proxy;
 
 import java.io.BufferedWriter;
+import java.io.DataInput;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -23,7 +26,10 @@ public class ProxyServer {
 	
 	ServerSocket proxySocket;
 
-	String logFileName = "log.txt";
+	DataOutputStream os;
+	DataInputStream is;
+
+	String logFileName = "proxy.log";
 
 	public static void main(String[] args) {
 		new ProxyServer().startServer(Integer.parseInt(args[0]));
@@ -46,7 +52,22 @@ public class ProxyServer {
 			 * remember to catch Exceptions!
 			 *
 		*/
- 
+		try {
+		proxySocket = new ServerSocket(8008);
+		Socket client = proxySocket.accept();
+		is = new DataInputStream(client.getInputStream());
+		os = new DataOutputStream(client.getOutputStream());
+		String line = is.readLine();
+		System.out.println("First print = " + line);
+		writeLog(line);
+		os.writeBytes("Hello\n");
+		System.out.println("Second print = test");
+		client.close();
+		}
+		catch(Exception e){
+			System.out.println(e);
+		}
+
 		
 	}
 
@@ -68,6 +89,18 @@ public class ProxyServer {
 			 * e.g. String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
 			 *
 			*/
+		try{
+			String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+			info = "Date: " + timeStamp + " " + info;
+
+			FileWriter myWriter = new FileWriter("proxy.log");
+
+			myWriter.write(info + "\n");
+			myWriter.close();
+		}
+		catch(Exception e){
+			System.out.println(e);
+		}
 	}
 
 }

@@ -23,7 +23,6 @@ public class RequestHandler extends Thread {
 	
 	private ProxyServer server;
 
-
 	public RequestHandler(Socket clientSocket, ProxyServer proxyServer) {
 
 		
@@ -57,6 +56,9 @@ public class RequestHandler extends Thread {
 			 * (4) Otherwise, call method proxyServertoClient to process the GET request
 			 *
 		*/
+		System.out.println("here4");
+		
+		
 
 	}
 
@@ -83,6 +85,7 @@ public class RequestHandler extends Thread {
 		 * (4) Write the web server's response to a cache file, put the request URL and cache file name to the cache Map
 		 * (5) close file, and sockets.
 		*/
+		System.out.println("here3");
 		
 	}
 	
