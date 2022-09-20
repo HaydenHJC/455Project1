@@ -7,6 +7,7 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.file.Files;
@@ -57,11 +58,16 @@ public class ProxyServer {
 		Socket client = proxySocket.accept();
 		is = new DataInputStream(client.getInputStream());
 		os = new DataOutputStream(client.getOutputStream());
+
 		String line = is.readLine();
-		System.out.println("First print = " + line);
-		writeLog(line);
+
 		os.writeBytes("Hello\n");
+
+		System.out.println("First print = " + line);
 		System.out.println("Second print = test");
+
+		writeLog(line);
+
 		client.close();
 		}
 		catch(Exception e){
@@ -93,10 +99,15 @@ public class ProxyServer {
 			String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
 			info = "Date: " + timeStamp + " " + info;
 
-			FileWriter myWriter = new FileWriter("proxy.log");
+			FileWriter fw = new FileWriter("proxy.log", true);
+			BufferedWriter bw = new BufferedWriter(fw);
+			PrintWriter pw = new PrintWriter(bw);
 
-			myWriter.write(info + "\n");
-			myWriter.close();
+			pw.println(info + "\n");
+
+			pw.flush();
+
+			pw.close();
 		}
 		catch(Exception e){
 			System.out.println(e);
